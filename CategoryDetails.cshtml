@@ -1,0 +1,51 @@
+@{
+  Layout = "_Layout";
+}
+
+@model UniversityRegistrar.Models.Student;
+@using UniversityRegistrar.Models;
+@using System.Collections.Generic;
+
+<h2>Student Details</h2>
+<hr />
+
+<h3>@Html.DisplayNameFor(model => model.Name): @Html.DisplayFor(model => model.Name)<h3>
+
+<h3>@Html.DisplayNameFor(model => model.Date): @Html.DisplayFor(model => model.Date)<h3>
+
+@if (@Model.Students.Count == 0)
+{
+  <h3>No students have been added yet!</h3>
+} 
+else
+{
+  <h4>Courses the student has:</h4>
+  <ul>
+    @foreach (Student student in Model.Students)
+    {
+      string courses = "";
+      @if(student.JoinEntities.Count == 0)
+      {
+        courses = "This student does not have any courses.";
+      }
+    else
+      {
+        List<string> courseList = new List<string>();
+        @foreach(StudentCourse join in student.JoinEntities)
+        {
+          courseList.Add(join.Course.CourseName);
+        }
+        courses = String.Join(", ", courseList);
+      }
+      
+    <li>@student.Name | Courses: @courses</li> 
+
+    }
+  </ul>
+}
+
+<p>@Html.ActionLink("Edit Student", "Edit", new { id = Model.StudentId })</p>
+<p>@Html.ActionLink("Delete Student", "Delete", new { id = Model.StudentId })</p>
+<p>@Html.ActionLink("Back to list", "Index")</p>
+
+<p>@Html.ActionLink("Add a course", "Create", "Courses")</p>

@@ -1,0 +1,15 @@
+@{
+  Layout = "_Layout";
+}
+<p>hi</p>
+
+@model UniversityRegistrar.Models.Department;
+@using UniversityRegistrar.Models;
+
+<h3>Department Details: @Html.DisplayFor(model => model.DepartmentName)</h3>
+
+
+@if(Model.Courses.Count == 0)
+{
+  <p>This Department has no courses associated with it</p>
+}

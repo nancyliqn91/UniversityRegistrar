@@ -1,0 +1,21 @@
+@{
+  Layout = "_Layout";
+}
+
+@model UniversityRegistrar.Models.Course
+
+<p>@Html.ValidationMessageFor(model => model.CourseName, "", new {@class = "text-danger", @style = "font-weight: 600;"})</p>
+
+<p>@Html.ValidationMessageFor(model => model.CourseNumber, "", new {@class = "text-danger", @style = "font-weight: 600;"})</p>
+
+<h4>Add a new Course</h4>
+@using (Html.BeginForm())
+{
+  @Html.LabelFor(model => model.CourseName)
+  @Html.TextBoxFor(model => model.CourseName)
+
+  @Html.LabelFor(model => model.CourseNumber)
+  @Html.TextBoxFor(model => model.CourseNumber)
+  <input type="submit" value="Add new Course" />
+}
+<p>@Html.ActionLink("Show all Courses", "Index")</p>
