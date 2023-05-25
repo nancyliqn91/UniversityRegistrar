@@ -20,9 +20,11 @@ namespace UniversityRegistrar.Controllers
     {
       Student[] stus = _db.Students.ToArray();
       Course[] courses = _db.Courses.ToArray();
+      Department[] departments = _db.Departments.ToArray();
       Dictionary<string,object[]> model = new Dictionary<string, object[]>();
       model.Add("students", stus);
       model.Add("courses", courses);
+      model.Add("departments", departments);
       return View(model);
     }      
 

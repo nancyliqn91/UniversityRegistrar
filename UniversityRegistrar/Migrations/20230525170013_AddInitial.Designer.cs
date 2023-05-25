@@ -11,8 +11,8 @@ using UniversityRegistrar.Models;
 namespace UniversityRegistrar.Migrations
 {
     [DbContext(typeof(UniversityRegistrarContext))]
-    [Migration("20230523214546_AddDepartmentEntity")]
-    partial class AddDepartmentEntity
+    [Migration("20230525170013_AddInitial")]
+    partial class AddInitial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,7 +35,7 @@ namespace UniversityRegistrar.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.HasKey("CourseId");
@@ -100,9 +100,13 @@ namespace UniversityRegistrar.Migrations
 
             modelBuilder.Entity("UniversityRegistrar.Models.Course", b =>
                 {
-                    b.HasOne("UniversityRegistrar.Models.Department", null)
+                    b.HasOne("UniversityRegistrar.Models.Department", "Department")
                         .WithMany("Courses")
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("UniversityRegistrar.Models.StudentCourse", b =>

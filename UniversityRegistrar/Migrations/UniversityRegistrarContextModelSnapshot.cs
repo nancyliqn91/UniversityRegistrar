@@ -33,14 +33,14 @@ namespace UniversityRegistrar.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int?>("DepartmentId")
+                    b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
                     b.HasKey("CourseId");
 
                     b.HasIndex("DepartmentId");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("UniversityRegistrar.Models.Department", b =>
@@ -54,7 +54,7 @@ namespace UniversityRegistrar.Migrations
 
                     b.HasKey("DepartmentId");
 
-                    b.ToTable("Departments", (string)null);
+                    b.ToTable("Departments");
                 });
 
             modelBuilder.Entity("UniversityRegistrar.Models.Student", b =>
@@ -72,7 +72,7 @@ namespace UniversityRegistrar.Migrations
 
                     b.HasKey("StudentId");
 
-                    b.ToTable("Students", (string)null);
+                    b.ToTable("Students");
                 });
 
             modelBuilder.Entity("UniversityRegistrar.Models.StudentCourse", b =>
@@ -93,14 +93,18 @@ namespace UniversityRegistrar.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("StudentCourses", (string)null);
+                    b.ToTable("StudentCourses");
                 });
 
             modelBuilder.Entity("UniversityRegistrar.Models.Course", b =>
                 {
-                    b.HasOne("UniversityRegistrar.Models.Department", null)
+                    b.HasOne("UniversityRegistrar.Models.Department", "Department")
                         .WithMany("Courses")
-                        .HasForeignKey("DepartmentId");
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("UniversityRegistrar.Models.StudentCourse", b =>

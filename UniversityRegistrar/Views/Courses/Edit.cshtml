@@ -4,22 +4,26 @@
 
 @model UniversityRegistrar.Models.Course
 
+<h2>Edit</h2>
 <p>@Html.ValidationMessageFor(model => model.CourseName, "", new {@class = "text-danger", @style = "font-weight: 600;"})</p>
 
 <p>@Html.ValidationMessageFor(model => model.CourseNumber, "", new {@class = "text-danger", @style = "font-weight: 600;"})</p>
 
-<h4>Add a new Course</h4>
+<h4>Edit this course: @Html.DisplayFor(model => model.CourseName)</h4>
+
 @using (Html.BeginForm())
 {
+  @Html.HiddenFor(model => model.CourseId)
+
   @Html.LabelFor(model => model.CourseName)
-  @Html.TextBoxFor(model => model.CourseName)
+  @Html.EditorFor(model => model.CourseName)
 
   @Html.LabelFor(model => model.CourseNumber)
-  @Html.TextBoxFor(model => model.CourseNumber)
+  @Html.EditorFor(model => model.CourseNumber)
 
   @Html.LabelFor(model => model.Department)
   @Html.DropDownList("DepartmentId")
 
-  <input type="submit" value="Add new Course" />
+  <input type="submit" value="Save" />
 }
-<p>@Html.ActionLink("Show all Courses", "Index")</p>
+<p>@Html.ActionLink("Back to list", "Index")</p>

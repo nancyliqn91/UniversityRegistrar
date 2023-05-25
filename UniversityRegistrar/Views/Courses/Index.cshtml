@@ -10,14 +10,15 @@
 {
   <h3>No Courses have been added yet!</h3>
 } 
-
-<ul>
-  @foreach(Course course in Model)
-  {
-    <li>@Html.ActionLink($"{course.CourseName}", "Details", new { id = course.CourseId })</li>
-  }
-</ul>
-
+else
+{
+  <ul>
+    @foreach(Course course in Model)
+    {
+      <li>@Html.ActionLink($"{course.CourseName}", "Details", new { id = course.CourseId }) | @course.Department.DepartmentName</li>
+    }
+  </ul>
+}
 <p>@Html.ActionLink("Add new Course", "Create")</p>
-<p>@Html.ActionLink("Add new Student", "Create", "Students")</p>
+<p>@Html.ActionLink("Add new Student", "AddStudent", "Courses")</p>
 <p>@Html.ActionLink("Go Home", "Index", "Home")</p>

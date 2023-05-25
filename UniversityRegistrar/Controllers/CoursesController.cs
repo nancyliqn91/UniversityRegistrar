@@ -17,23 +17,15 @@ namespace UniversityRegistrar.Controllers
 
     public ActionResult Index()
     {
-      return View(_db.Courses.ToList());
+      List<Course> model = _db.Courses
+                              .Include(course => course.Department) 
+                              .ToList();
+      return View(model);
     }
     
-    public ActionResult Details(int id)
-    {
-      Course thisCourse = _db.Courses
-                .Include(course => course.JoinEntities)
-                .ThenInclude(join => join.Student)
-                .FirstOrDefault(courses => courses.CourseId == id);
-      // ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "CourseName");
-      return View(thisCourse);
-    }
-
-
     public ActionResult Create()
     {
-      ViewBag.CourseId = new SelectList(_db.Courses, "CourseId", "CourseName");
+      ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DepartmentName");
       return View();
     }
 
@@ -42,6 +34,7 @@ namespace UniversityRegistrar.Controllers
     {
       if(!ModelState.IsValid)
       {
+        ViewBag.DepartmentId = new SelectList(_db.Departments, "DepartmentId", "DepartmentName");
         return View(course);
       } 
       else
@@ -52,26 +45,44 @@ namespace UniversityRegistrar.Controllers
       }
     }
 
+    public ActionResult Details(int id)
+    {
+      Course thisCourse = _db.Courses
+                .Include(course => course.JoinEntities)
+                .ThenInclude(join => join.Student)
+                .FirstOrDefault(course => course.CourseId == id);
+
+      return View(thisCourse);
+    }
+
     public ActionResult AddStudent(int id)
     {
       Course thisCourse = _db.Courses.FirstOrDefault(course => course.CourseId == id);
       ViewBag.StudentId = new SelectList(_db.Students, "StudentId", "Name");
-      return View(thisCourse);
-      
+      return View(thisCourse);     
     }
 
     [HttpPost]
     public ActionResult AddStudent(Course course, int studentId)
     {
       #nullable enable
-      StudentCourse? joinEntity = _db.StudentCourses.FirstOrDefault(join => (join.StudentId == studentId && join.CourseId == course.CourseId));
+      StudentCourse? joinEntity = _db.StudentCourses.FirstOrDefault(join => (join.CourseId == course.CourseId && join.StudentId == studentId));
       #nullable disable
+      
       if( joinEntity == null && studentId !=0)
       {
-        _db.StudentCourses.Add(new StudentCourse() {StudentId = studentId, CourseId = course.CourseId});
+        _db.StudentCourses.Add(new StudentCourse() {CourseId = course.CourseId, StudentId = studentId});
         _db.SaveChanges();
       }
       return RedirectToAction("Details", new { id = course.CourseId});
+    }
+
+    [HttpPost]
+    public ActionResult Edit(Course course)
+    {
+      _db.Courses.Update(course);
+      _db.SaveChanges();
+      return RedirectToAction("Index");
     }
 
     public ActionResult Delete(int id)

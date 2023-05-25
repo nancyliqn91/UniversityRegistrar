@@ -51,11 +51,11 @@ namespace UniversityRegistrar.Controllers
     public ActionResult Details(int id)
     {
       Department thisDepartment = _db.Departments
+                                     .Include(department => department.Courses)
                                      .FirstOrDefault(department => department.DepartmentId == id);
       return View(thisDepartment);
 
     }
-
 
 
   }
